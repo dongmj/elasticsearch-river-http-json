@@ -1,0 +1,66 @@
+---
+layout: tutorial
+title: Creating a streaming JSON river for data import
+cat: tutorials
+author: Dong Mingjun
+tutorial_desc: Creating a river, which RESTFul data in. This design is mainly for elasticsearch updating from 0.90 to 1.3.4 version
+---
+
+Disclaimer: This river program refer to "elasticsearch-river-streaming-json". You can get the "source at github":https://github.com/spinscale/elasticsearch-river-streaming-json
+
+h2. Using rivers for automated data import into elasticsearch
+
+One of the core questions of elasticsearch integration is how to index the data into elasticsearch. In most cases there will be an low version's elasticsearch, from which the data gets imported into high version's elasticsearch. The usual way is to reconstructe all data. It's too low and waste of a lot of time to integerate data.
+
+This article will cover a possible integration scenario, in case you will directly write data to your high version elasticsearch, and use a river, which imports data via a JSON export from the low version elasticsearch.
+
+The samples will show you all configuration used for controlling this river.
+
+h2. The URL request
+This river will get data from source server by search api. For example: 
+'http://10.8.8.8:9200/index/_search' with body '{"from":0,"size":100,"sort":"_uid"}'
+
+h2. How to run it?
+Just put the river jar in your plugin path, like '/opt/es/plugins/json'. And restart you elasticsearch server.
+
+h2. Simple URL Request
+
+The general schema of a river instance declaration is
+
+curl -XPUT 'localhost:9200/_river/<rivername>/_meta' -d '{
+	"type":"json",
+	"configuration":{
+		<river definition>
+	}
+}'
+
+Example:
+
+Add new instance of the river.
+curl -XPUT 'localhost:9200/_river/json1/_meta' -d '{
+	"type":"json",
+	"configuration":{
+		"sourceURL":"http://10.8.8.8:9200",
+		"inputIndex":["index1"]
+		...
+	}
+}'
+
+Delete a instance of the river.
+curl -XDELETE 'localhost:9200/_river/json1'
+
+h2. Parameters
+
+'sourceURL' - (required) the source elasticsearch (low version) RESTFul url (like http://10.8.8.8:9200). You must input the url with protocal 'http' and the port of source elasticsearch server!
+'inputIndex' - (required) the indices in the source elasticsearch.
+'inputType' - (optional) the type of indices in the source elasticsearch.
+'outputIndex' - (optional) the indices of new elasticsearch server. if not input, use the source index name.
+'outputType' - (optional) the type of indices in the new elasticsearch server.
+'batchCommitCount' - (optional) the count to commit documents to the new server. default 2000.
+'searchFrom' - (optional) the begin position of url query from the source server. default 0.
+'searchSize' - (optional) the size of document for every url request. default 500.
+'sleepTimeEveryReq' - (optional) the millisecond between every request to the source server. default 100.
+
+h2. Need You
+
+Thanks for reading and happy streaming. If you have some improvements and questions, you can reach me via "github":http://github.com/dongmj, "mail":mailto:dongmj@gmail.com
