@@ -30,22 +30,22 @@ h2. Simple URL Request
 The general schema of a river instance declaration is
 
 curl -XPUT 'localhost:9200/_river/<rivername>/_meta' -d '{
-	"type":"json",
-	"configuration":{
-		<river definition>
-	}
+	>"type":"json",
+	>"configuration":{
+		>><river definition>
+	>}
 }'
 
 Example:
 
 Add new instance of the river.
 curl -XPUT 'localhost:9200/_river/json1/_meta' -d '{
-	"type":"json",
-	"configuration":{
-		"sourceURL":"http://10.8.8.8:9200",
-		"inputIndex":["index1"]
-		...
-	}
+	>"type":"json",
+	>"configuration":{
+		>>"sourceURL":"http://10.8.8.8:9200",
+		>>"inputIndex":["index1"]
+		>>...
+	>}
 }'
 
 Delete a instance of the river.
