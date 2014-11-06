@@ -17,10 +17,12 @@ This article will cover a possible integration scenario, in case you will direct
 The samples will show you all configuration used for controlling this river.
 
 h2. The URL request
+
 This river will get data from source server by search api. For example: 
 'http://10.8.8.8:9200/index/_search' with body '{"from":0,"size":100,"sort":"_uid"}'
 
 h2. How to run it?
+
 Just put the river jar in your plugin path, like '/opt/es/plugins/json'. And restart you elasticsearch server.
 
 h2. Simple URL Request
@@ -38,7 +40,7 @@ Example:
 
 Add new instance of the river.
 curl -XPUT 'localhost:9200/_river/json1/_meta' -d '{
-	"type":"json",
+	type":"json",
 	"configuration":{
 		"sourceURL":"http://10.8.8.8:9200",
 		"inputIndex":["index1"]
