@@ -165,7 +165,7 @@ public class JsonRiverTest {
         node = NodeBuilder.nodeBuilder().settings(settingsBuilder).node();
         client = node.client();
 
-        client.prepareIndex("_river", "json1", "_meta").setSource("{ \"type\": \"json\",\"configuration\":{\"sourceURL\":\"http://localhost:4567\",\"inputIndex\":[\"goods1\"],\"outputIndex\":[\"goods\"],\"searchSize\":2} }").execute().actionGet();
+        client.prepareIndex("_river", "json1", "_meta").setSource("{ \"type\": \"json\",\"configuration\":{\"sourceURL\":[\"http://localhost:4567\"],\"inputIndex\":[\"goods1\"],\"outputIndex\":[\"goods\"],\"searchSize\":2,\"sleepTimeEveryReq\":400} }").execute().actionGet();
         client.admin().indices().prepareCreate("goods").execute().actionGet();
 
         client.admin().cluster().prepareHealth("goods").setWaitForYellowStatus().execute().actionGet();
@@ -176,7 +176,7 @@ public class JsonRiverTest {
         // sleep to ensure that the river has slurped in the data
         Thread.sleep(2000);
         
-        client.prepareIndex("_river", "json2", "_meta").setSource("{ \"type\": \"json\",\"configuration\":{\"sourceURL\":\"http://localhost:4567\",\"inputIndex\":[\"goods1\"],\"searchSize\":2} }").execute().actionGet();
+        client.prepareIndex("_river", "json2", "_meta").setSource("{ \"type\": \"json\",\"configuration\":{\"sourceURL\":[\"http://localhost:4567\"],\"inputIndex\":[\"goods1\"],\"searchSize\":2} }").execute().actionGet();
         client.admin().indices().prepareCreate("goods1").execute().actionGet();
         Thread.sleep(2000);
     }

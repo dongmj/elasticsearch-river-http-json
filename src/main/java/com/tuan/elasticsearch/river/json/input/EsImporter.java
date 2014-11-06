@@ -4,7 +4,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TransferQueue;
 
@@ -31,7 +33,7 @@ public class EsImporter implements Importer {
 	}
 
 	private void checkParams() {
-		if(jsonRiverConfigure.getSourceURL() == null)
+		if(jsonRiverConfigure.getSourceURL() == null || jsonRiverConfigure.getSourceURL().size() == 0)
 			throw new ElasticsearchException("source url can't be empty!");
 		if(jsonRiverConfigure.getInputIndex() == null || jsonRiverConfigure.getInputIndex().size() == 0)
 			throw new ElasticsearchException("input indices can't be empty!");
@@ -55,16 +57,24 @@ public class EsImporter implements Importer {
 				for(int j = 0; j < jsonRiverConfigure.getInputType().size(); j++) {
 					String inputType = jsonRiverConfigure.getInputType().get(j);
 					String outputType = jsonRiverConfigure.getOutputType().get(j);
-					String destURL = jsonRiverConfigure.getSourceURL()+"/" + inputIndex + "/" + inputType + "/_search";
+					String destURL = random(jsonRiverConfigure.getSourceURL()) + "/" + inputIndex + "/" + inputType + "/_search";
 					result.exportedProductCount += process(destURL, outputIndex, outputType);
 				}
 			} else {
-				String destURL = jsonRiverConfigure.getSourceURL()+"/" + inputIndex + "/_search";
+				String destURL = random(jsonRiverConfigure.getSourceURL()) +"/" + inputIndex + "/_search";
 				result.exportedProductCount += process(destURL, outputIndex, null);
 			}
 		}
 		
 		return result;
+	}
+	
+	/**
+	 * random url
+	 */
+	private static final Random _random = new Random(37);
+	private String random(List<String> urls) {
+		return urls.get(_random.nextInt(urls.size()));
 	}
 	
 	private int process(String destUrl, String index, String type) {
@@ -112,6 +122,7 @@ public class EsImporter implements Importer {
 	            		docId = null;
 	            		product = null;
 	            	}
+	            	
 	            }
 	        
 			}catch(IOException e) {

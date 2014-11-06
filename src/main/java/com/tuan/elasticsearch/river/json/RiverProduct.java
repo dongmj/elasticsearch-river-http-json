@@ -30,7 +30,6 @@ public class RiverProduct {
         riverProduct.type = type;
         riverProduct.id = id;
         riverProduct.product = product;
-        System.out.println("cccccccccccccccccccccccccccc" + riverProduct);
         return riverProduct;
     }
 

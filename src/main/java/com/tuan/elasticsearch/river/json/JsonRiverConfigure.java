@@ -7,7 +7,7 @@ public class JsonRiverConfigure {
 	/**
 	 * the source url.
 	 */
-	String sourceURL;
+	List<String> sourceURL;
 	/**
 	 * input indices
 	 */
@@ -37,15 +37,19 @@ public class JsonRiverConfigure {
 	 */
 	int searchSize = 500;
 	/**
-	 * 每次请求等待时间(ms)
+	 * the sleep time between every url request.
 	 */
 	int sleepTimeEveryReq = 100;
+	/**
+	 * the sleep time between copying every index.
+	 */
+	int sleepTimeEveryIndex = 100;
 	
-	public String getSourceURL() {
+	public List<String> getSourceURL() {
 		return sourceURL;
 	}
 
-	public void setSourceURL(String sourceURL) {
+	public void setSourceURL(List<String> sourceURL) {
 		this.sourceURL = sourceURL;
 	}
 
@@ -113,12 +117,20 @@ public class JsonRiverConfigure {
 		this.sleepTimeEveryReq = sleepTimeEveryReq;
 	}
 
+	public int getSleepTimeEveryIndex() {
+		return sleepTimeEveryIndex;
+	}
+
+	public void setSleepTimeEveryIndex(int sleepTimeEveryIndex) {
+		this.sleepTimeEveryIndex = sleepTimeEveryIndex;
+	}
+
 	@SuppressWarnings("unchecked")
 	public static JsonRiverConfigure getInstance(Map<String, Object> settings) {
 		JsonRiverConfigure configure = new JsonRiverConfigure();
 		if(settings != null) {
 			if(settings.containsKey("sourceURL"))
-				configure.setSourceURL((String) settings.get("sourceURL"));
+				configure.setSourceURL((List<String>) settings.get("sourceURL"));
 			if(settings.containsKey("inputIndex"))
 				configure.setInputIndex((List<String>) settings.get("inputIndex"));
 			if(settings.containsKey("inputType"))
@@ -135,6 +147,8 @@ public class JsonRiverConfigure {
 				configure.setSearchSize((int) settings.get("searchSize"));
 			if(settings.containsKey("sleepTimeEveryReq"))
 				configure.setSleepTimeEveryReq((int) settings.get("sleepTimeEveryReq"));
+			if(settings.containsKey("sleepTimeEveryIndex"))
+				configure.setSleepTimeEveryIndex((int) settings.get("sleepTimeEveryIndex"));
 		}
 		
 		return configure;	
@@ -147,7 +161,8 @@ public class JsonRiverConfigure {
 				+ outputIndex + ", outputType=" + outputType
 				+ ", batchCommitCount=" + batchCommitCount + ", searchFrom="
 				+ searchFrom + ", searchSize=" + searchSize
-				+ ", sleepTimeEveryReq=" + sleepTimeEveryReq + "]";
+				+ ", sleepTimeEveryReq=" + sleepTimeEveryReq
+				+ ", sleepTimeEveryIndex=" + sleepTimeEveryIndex + "]";
 	}
 
 }
