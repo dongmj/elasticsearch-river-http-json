@@ -152,7 +152,6 @@ public class EsImporter implements Importer {
         params.append("{")
         	.append("\"from\":").append(offset)
         	.append(",\"size\":").append(size)
-        	.append(",\"sort\":\"_uid\"")
         .append("}");
         
         byte[] bytes = params.toString().getBytes();

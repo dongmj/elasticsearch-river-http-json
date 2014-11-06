@@ -42,9 +42,6 @@ public class JsonRiverTest {
 					Integer from = (Integer) paramsMap.get("from");
 					Integer size = (Integer) paramsMap.get("size");
 					assertThat("size must not be null", size != null);
-					String sort = (String) paramsMap.get("sort");
-					assertThat("sort must be _id", sort.equals("_uid"));
-					System.out.println(paramsMap);
 					String result;
 					if(from == 2) {
 						result = jsonBuilder().startObject()
