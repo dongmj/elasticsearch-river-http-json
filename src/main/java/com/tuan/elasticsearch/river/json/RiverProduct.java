@@ -30,7 +30,15 @@ public class RiverProduct {
         riverProduct.type = type;
         riverProduct.id = id;
         riverProduct.product = product;
+        System.out.println("cccccccccccccccccccccccccccc" + riverProduct);
         return riverProduct;
     }
+
+	@Override
+	public String toString() {
+		return "RiverProduct [action=" + action + ", index=" + index
+				+ ", type=" + type + ", id=" + id + ", product=" + product
+				+ "]";
+	}
 
 }

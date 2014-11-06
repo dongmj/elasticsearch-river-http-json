@@ -63,8 +63,8 @@ public class JsonRiverTest {
 									.field("hits")
 										.startArray()
 											.startObject()
-												.field("_index").value("goods1")
-												.field("_type").value("goods_type")
+												.field("_index").value("goods3")
+												.field("_type").value("goods_type_3")
 												.field("_id").value("3")
 												.field("_score").value(1.0)
 												.field("_source")
@@ -76,7 +76,7 @@ public class JsonRiverTest {
 											.endObject()
 											.startObject()
 												.field("_index").value("goods1")
-												.field("_type").value("goods_type")
+												.field("_type").value("goods_type_4")
 												.field("_id").value("4")
 												.field("_score").value(0.6)
 												.field("_source")
@@ -152,8 +152,8 @@ public class JsonRiverTest {
 									.endObject()
 							.endObject().string();												
 					}
-								
-						return result;
+					System.out.println(result);
+					return result;
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -204,7 +204,16 @@ public class JsonRiverTest {
         response = builder.setIndex("goods1").setType("goods_type").setId("2").execute().actionGet();
         assertThat(response.isExists(), is(true));
         
-        response = builder.setIndex("goods1").setType("goods_type").setId("4").execute().actionGet();
+        response = builder.setIndex("goods1").setType("goods_type_4").setId("4").execute().actionGet();
+        assertThat(response.isExists(), is(true));
+ 
+        response = builder.setIndex("goods3").setType("goods_type_3").setId("3").execute().actionGet();
+        assertThat(response.isExists(), is(true));
+ 
+        response = builder.setIndex("goods").setType("goods_type_4").setId("4").execute().actionGet();
+        assertThat(response.isExists(), is(true));
+        
+        response = builder.setIndex("goods").setType("goods_type_3").setId("3").execute().actionGet();
         assertThat(response.isExists(), is(true));
         
         client.admin().indices().prepareDelete("goods","goods1").execute().actionGet();

@@ -82,30 +82,35 @@ public class EsImporter implements Importer {
 	            parser = JsonXContent.jsonXContent.createParser(in);
 	
 	            Map<String, Object> product = null;
-	            String id = null;
-	
 	            @SuppressWarnings("unused")
 	            Token token = null;
 	            processedCount= 0;
+	            String docType = type, docIndex = index, docId = null;
 	            while ((token = parser.nextToken()) != null) {
-	
 	            	if("total".equals(parser.text())) {
 	            		token = parser.nextToken();
 	            		total = Integer.parseInt(parser.text());
 	            	} else if(type == null && "_type".equals(parser.text())) {
 	            		token = parser.nextToken();
-	            		type = parser.text();
+	            		docType = parser.text();
 	            	} else if("_id".equals(parser.text())) {
 	            		token = parser.nextToken();
-	            		id = parser.text();
+	            		docId = parser.text();
 	            	} else if(index == null && "_index".equals(parser.text())) {
 	            		token = parser.nextToken();
-	            		index = parser.text();
+	            		docIndex = parser.text();
 	            	} else if("_source".equals(parser.text())) {
 	            		token = parser.nextToken();
 	            		product = parser.map();
-	            		queue.add(RiverProduct.index(index, type, id, product));
+	            	}
+	            	
+	            	if(docIndex != null && docType != null && docId != null && product != null) {
+	            		queue.add(RiverProduct.index(docIndex, docType, docId, product));
 	            		processedCount++;
+	            		docIndex = index;
+	            		docType = type;
+	            		docId = null;
+	            		product = null;
 	            	}
 	            }
 	        
@@ -115,7 +120,7 @@ public class EsImporter implements Importer {
 				closeQuietly(in);
 			}
 			offset += processedCount;
-			logger.info("process [{}] documents of [{}].", processedCount, total);
+			logger.info("process [{}] documents of [{}].", offset, total);
 			
 			if(sleepTime > 0)
 				try {
