@@ -29,39 +29,45 @@ h2. Simple URL Request
 
 The general schema of a river instance declaration is
 
+<pre class="prettyprint">
 curl -XPUT 'localhost:9200/_river/<rivername>/_meta' -d '{
 	"type":"json",
 	"configuration":{
 		<river definition>
 	}
 }'
+<pre>
 
 Example:
 
 Add new instance of the river.
+<pre class="prettyprint">
 curl -XPUT 'localhost:9200/_river/json1/_meta' -d '{
 	type":"json",
 	"configuration":{
-		"sourceURL":"http://10.8.8.8:9200",
+		"sourceURL":["http://10.8.8.8:9200"],
 		"inputIndex":["index1"]
 		...
 	}
 }'
-
+</pre>
 Delete a instance of the river.
+<pre>
 curl -XDELETE 'localhost:9200/_river/json1'
+</pre>
 
 h2. Parameters
 
-'sourceURL' - (required) the source elasticsearch (low version) RESTFul url (like http://10.8.8.8:9200). You must input the url with protocal 'http' and the port of source elasticsearch server!
-'inputIndex' - (required) the indices in the source elasticsearch.
-'inputType' - (optional) the type of indices in the source elasticsearch.
-'outputIndex' - (optional) the indices of new elasticsearch server. if not input, use the source index name.
-'outputType' - (optional) the type of indices in the new elasticsearch server.
-'batchCommitCount' - (optional) the count to commit documents to the new server. default 2000.
-'searchFrom' - (optional) the begin position of url query from the source server. default 0.
-'searchSize' - (optional) the size of document for every url request. default 500.
-'sleepTimeEveryReq' - (optional) the millisecond between every request to the source server. default 100.
+* @sourceURL@ - (required) an array field. The source elasticsearch (low version) RESTFul url (like http://10.8.8.8:9200). You must input the url with protocal 'http' and the port of source elasticsearch server! If you put a url array in this field, the river will select one random url every time.
+* @inputIndex@ - (required) an array field. The indices in the source elasticsearch.
+* @inputType@ - (optional) an array field. The type of indices in the source elasticsearch.
+* @outputIndex@ - (optional) an array field, and the size equal inputIndex array's. The indices of new elasticsearch server. if not input, use the source index name.
+* @outputType@ - (optional) an array field, and the size equal inputType array's. The type of indices in the new elasticsearch server.
+* @batchCommitCount@ - (optional) the count to commit documents to the new server. default 2000.
+* @searchFrom@ - (optional) the begin position of url query from the source server. default 0.
+* @searchSize@ - (optional) the size of document for every url request. default 500.
+* @sleepTimeEveryReq@ - (optional) the millisecond between every request to the source server. default 100.
+* @sleepTimeEveryIndex@ - (optional) the millisecond between every index request. default 100.
 
 h2. Need You
 
