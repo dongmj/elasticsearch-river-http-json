@@ -26,9 +26,7 @@ h2. How to run it?
 Just put the river jar in your plugin path, like '/opt/es/plugins/json'. And restart you elasticsearch server.
 
 h2. Simple URL Request
-
-The general schema of a river instance declaration is
-
+The general schema of a river instance declaration is like this:
 <pre class="prettyprint">
 curl -XPUT 'localhost:9200/_river/<rivername>/_meta' -d '{
 	"type":"json",
@@ -36,11 +34,11 @@ curl -XPUT 'localhost:9200/_river/<rivername>/_meta' -d '{
 		<river definition>
 	}
 }'
-<pre>
+</pre>
 
-Example:
+h3. Two Examples:
 
-Add new instance of the river.
+* Add an instance of this river.
 <pre class="prettyprint">
 curl -XPUT 'localhost:9200/_river/json1/_meta' -d '{
 	type":"json",
@@ -51,8 +49,8 @@ curl -XPUT 'localhost:9200/_river/json1/_meta' -d '{
 	}
 }'
 </pre>
-Delete a instance of the river.
-<pre>
+* Delete the instance of the river.
+<pre class="prettyprint">
 curl -XDELETE 'localhost:9200/_river/json1'
 </pre>
 
